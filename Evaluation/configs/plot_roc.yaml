@@ -3,29 +3,29 @@ defaults:
   - _self_
 
 # input
-path_to_mlflow: ???
-experiment_id: ???
+path_to_mlflow: ../Training/python/2018v1/mlruns
+experiment_id: 4
 discriminators: # in the format run_id -> cfg
-  ???: # DeepTau v2.1
-    name: "DeepTau (v2.1)"
+  3664a0c81e43429bab18138309d17a05: # DeepTau v2.1
+    name: "DeepTau (v2.1) vs electron"
     curve_types: ['roc_curve', 'roc_wp'] 
     plot_cfg:
-      color: grey
+      color: blue
       dashed: false
       alpha: 1.
       dots_only: false # if true, possible also to specify `marker_size` here
       with_errors: true # plot error bars for each of `curve_types`
-  ???: # DeepTau v2.5
-    name: "DeepTau (v2.5)"
+  7b6d535b3d054540acb727c3f33d1a8f: # DeepTau v2.5
+    name: "DeepTau (v2.5) vs electron"
     curve_types: ['roc_curve', 'roc_wp'] 
     plot_cfg:
-      color: black
+      color: green
       dashed: false
       alpha: 1.
       dots_only: false
       with_errors: true
 reference:  # should be present in `discriminators`
-  ???: 'roc_curve'
+  7b6d535b3d054540acb727c3f33d1a8f : 'roc_curve'
 
 # region
 period:  # \ 2018 (13 TeV) \  Phase 2 \ # for plotting only, not used in curve selection 

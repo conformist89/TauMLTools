@@ -12,10 +12,10 @@ plot_setup_map:
     yscale: 'log'
     ylim: [2e-5, 1]
     #
-    ratio_xlabel_size: 16
+    ratio_xlabel_size: 18
     ratio_yscale: 'log'
     ratio_ylim: [0.2, 2]
-    ratio_ylabel: 'Ratio'
+    ratio_ylabel: '$\frac{v2.5}{v2.1}$'
     ratio_ylabel_size: 16
     ratio_ylabel_pad: 10
     ratio_tick_size: 12
@@ -33,10 +33,10 @@ plot_setup_map:
     yscale: 'log'
     ylim: [2e-5, 1]
     #
-    ratio_xlabel_size: 16
+    ratio_xlabel_size: 18
     ratio_yscale: 'log'
     ratio_ylim: [0.5, 2]
-    ratio_ylabel: 'Ratio'
+    ratio_ylabel: '$\frac{v2.5}{v2.1}$'
     ratio_ylabel_size: 16
     ratio_ylabel_pad: 10  
     ratio_tick_size: 12
@@ -54,10 +54,10 @@ plot_setup_map:
     yscale: 'log'
     ylim: [3e-4, 1]
     #
-    ratio_xlabel_size: 16
+    ratio_xlabel_size: 18
     ratio_yscale: 'linear'
-    ratio_ylim: [0.4, 1.1]
-    ratio_ylabel: 'Ratio'
+    ratio_ylim: [0.95, 5]
+    ratio_ylabel: '$\frac{v2.5}{v2.1}$'
     ratio_ylabel_size: 16
     ratio_ylabel_pad: 17
     ratio_tick_size: 12

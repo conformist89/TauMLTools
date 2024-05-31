@@ -30,10 +30,10 @@ def main(cfg: DictConfig) -> None:
         os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 
     # load the model
-    with open(to_absolute_path(f'{path_to_artifacts}/input_cfg/metric_names.json')) as f:
-        metric_names = json.load(f)
-    path_to_model = f'{path_to_artifacts}/model'
-    model = load_model(path_to_model, {name: lambda _: None for name in metric_names.keys()}) # workaround to load the model without loading metric functions
+    # with open(to_absolute_path(f'{path_to_artifacts}/input_cfg/metric_names.json')) as f:
+    #     metric_names = json.load(f)
+    # path_to_model = f'{path_to_artifacts}/model'
+    # model = load_model(path_to_model, {name: lambda _: None for name in metric_names.keys()}) # workaround to load the model without loading metric functions
 
     # load baseline training cfg and update it with parsed arguments
     training_cfg = OmegaConf.load(to_absolute_path(cfg.path_to_training_cfg))
@@ -100,10 +100,10 @@ def main(cfg: DictConfig) -> None:
                 y_pred = np.zeros((size, y.shape[1]))
                 y_target = np.zeros((size, y.shape[1]))
 
-                if dataloader.input_type=="Adversarial":
-                    y_pred[indexes] = model.predict(X)[0]
-                else:
-                    y_pred[indexes] = model.predict(X)
+                # if dataloader.input_type=="Adversarial":
+                #     y_pred[indexes] = model.predict(X)[0]
+                # else:
+                #     y_pred[indexes] = model.predict(X)
 
                 y_target[indexes] = y
                 

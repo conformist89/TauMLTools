@@ -25,6 +25,7 @@ def main(cfg: DictConfig) -> None:
     # init Discriminator() class from filtered input configuration
     field_names = set(f_.name for f_ in fields(eval_tools.Discriminator))
     init_params = {k:v for k,v in cfg.discriminator.items() if k in field_names}
+    wp_thresholds = None
     if 'wp_thresholds' in init_params:
         if not (isinstance(init_params['wp_thresholds'], DictConfig) or isinstance(init_params['wp_thresholds'], dict)):
             if isinstance(init_params['wp_thresholds'], str): # assume that it's the filename to read WPs from
@@ -37,6 +38,7 @@ def main(cfg: DictConfig) -> None:
         wp_thresholds = None
     discriminator = eval_tools.Discriminator(**init_params)
 
+    
     # construct branches to be read from input files
     input_branches = OmegaConf.to_object(cfg.input_branches)
     if ((_b:=discriminator.pred_column) is not None) and (cfg.path_to_pred is None):
@@ -74,6 +76,8 @@ def main(cfg: DictConfig) -> None:
                 wp_column = f"{cfg['discriminator']['wp_column_prefix']}{wp_vs_type}"
                 flag = 1 << wp
                 df_all = df_all[np.bitwise_and(df_all[wp_column], flag) != 0]
+                # flag = wp
+                # df_all = df_all[df_all[wp_column] >= flag]
             else:
                 if wp_thresholds is not None: # take thresholds from previously loaded json
                     wp_thr = wp_thresholds[wp_vs_type][wp_name]
@@ -81,7 +85,9 @@ def main(cfg: DictConfig) -> None:
                     wp_thr = cfg['discriminator']['wp_thresholds_map'][wp_vs_type][wp_name]
                 else:
                     raise RuntimeError('WP thresholds either from wp_column, or wp_thresholds_map, or via input json file are not provided.')
-                wp_cut = f"{cfg['discriminator']['pred_column_prefix']}{wp_vs_type} > {wp_thr}"
+                # wp_cut = f"{cfg['discriminator']['pred_column_prefix']}{wp_vs_type} > {wp_thr}"
+                wp_cut = "tau_byDeepTau2018v2p5VS{}raw > {}".format(wp_vs_type, wp_thr)
+                print("\n wp_cut", wp_cut)
                 df_all = df_all.query(wp_cut)
         
 

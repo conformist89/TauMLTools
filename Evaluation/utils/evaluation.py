@@ -161,7 +161,7 @@ class PlotSetup:
     ratio_xlabel_size: int = 16
     ratio_yscale: str = 'linear'
     ratio_ylim: list = None
-    ratio_ylabel: str = 'Ratio'
+    ratio_ylabel: str = '$\frac{DT 2.5}{DT 2.1}$'
     ratio_ylabel_size: int = 16
     ratio_ylabel_pad: int = 15
     ratio_tick_size: int = 12
@@ -211,7 +211,8 @@ class PlotSetup:
 
     @staticmethod
     def get_eta_text(eta_min, eta_max):
-        eta_text = r'${} < |\eta| < {}$'.format(eta_min, eta_max)
+        # eta_text = r'${} < |\eta| < {}$'.format(eta_min, eta_max)
+        eta_text = r'$|\eta| < {}$'.format(eta_max)
         return eta_text
     
     @staticmethod
@@ -227,8 +228,13 @@ class PlotSetup:
         ax.text(0.03, 0.89 - n_entries*0.07, self.get_pt_text(pt_min, pt_max), fontsize=14, transform=ax.transAxes)
         ax.text(0.03, 0.82 - n_entries*0.07, self.get_eta_text(eta_min, eta_max), fontsize=14, transform=ax.transAxes)
         ax.text(0.03, 0.75 - n_entries*0.07, self.get_dm_text(dm_bin), fontsize=14, transform=ax.transAxes)
+        # ax.text(0.03, 0.62 - n_entries*0.07, "Jets from "r'$t\bar{t}$', fontsize=14, transform=ax.transAxes)
+        # ax.text(0.03, 0.62 - n_entries*0.07, "Jets from "r'$W+jets$', fontsize=14, transform=ax.transAxes)
+        ax.text(0.03, 0.62 - n_entries*0.07, "Electrons from "r'$Z \rightarrow ee$', fontsize=14, transform=ax.transAxes)
         ax.text(0.01, header_y, 'CMS', fontsize=14, transform=ax.transAxes, fontweight='bold', fontfamily='sans-serif')
         ax.text(0.12, header_y, 'Simulation Preliminary', fontsize=14, transform=ax.transAxes, fontstyle='italic',
+                fontfamily='sans-serif')
+        ax.text(0.65, header_y, '59.7 $fb^{-1}$ (2018, 13 TeV)', fontsize=14, transform=ax.transAxes, fontstyle='italic',
                 fontfamily='sans-serif')
         ax.text(0.73, header_y, period, fontsize=13, transform=ax.transAxes, fontweight='bold',
                 fontfamily='sans-serif')
@@ -264,6 +270,10 @@ class Discriminator:
             wp = self.wp_name_to_index[wp_name]
             flag = 1 << wp
             passed = (np.bitwise_and(df[self.wp_column], flag) != 0).astype(int)
+            # flag = wp
+            # print("\n flag:::", flag)
+            # passed = (df[self.wp_column] >= flag).astype(int)
+            # print("\n passed:::", passed)
             return np.sum(passed * df.weight.values)
         elif self.wp_from == 'pred_column':
             if len(self.wp_thresholds) > 0:
@@ -419,12 +429,12 @@ def prepare_filelists(sample_alias, path_to_input, path_to_pred, path_to_target,
             return basename
         
     # prepare list of files with inputs
-    # if path_to_input is not None:
-    #     path_to_input = os.path.abspath(to_absolute_path(fill_placeholders(path_to_input, {"{sample_alias}": sample_alias})))
-    #     input_common_suffix = find_common_suffix(glob(path_to_input))
-    #     input_files = sorted(glob(path_to_input), key=partial(path_splitter, common_suffix=input_common_suffix))
-    # else:
-    #     input_files = []
+    if path_to_input is not None:
+        path_to_input = os.path.abspath(to_absolute_path(fill_placeholders(path_to_input, {"{sample_alias}": sample_alias})))
+        input_common_suffix = find_common_suffix(glob(path_to_input))
+        input_files = sorted(glob(path_to_input), key=partial(path_splitter, common_suffix=input_common_suffix))
+    else:
+        input_files = []
     
     # prepare list of files with target labels
     if path_to_target is not None:
@@ -448,9 +458,9 @@ def prepare_filelists(sample_alias, path_to_input, path_to_pred, path_to_target,
             # if len(target_files) != len(input_files):
             #     raise Exception(f'Number of input files ({len(input_files)}) not equal to number of target files with labels ({len(target_files)})')
     else: # will assume that target branches "gen_*" are present in input files
-        raise FileNotFoundError(f'Target is not provided. With last modification target is required')
-        # assert len(input_files)>0
-        # target_files = [None]*len(input_files)
+        # raise FileNotFoundError(f'Target is not provided. With last modification target is required')
+        assert len(input_files)>0
+        target_files = [None]*len(input_files)
 
     # prepare list of files with inputs/predictions
     if path_to_pred is not None:
